@@ -33,6 +33,12 @@ if (!empty($_POST['guess'])) {
 <head>
     <title>game</title>
     <link rel="stylesheet" href="resource/style.css">
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <style type="text/css">
+        button {
+            width: 120px;
+        }
+    </style>
 </head>
 <body>
 <form action="" method="post">
@@ -42,29 +48,69 @@ if (!empty($_POST['guess'])) {
 <h2>Game Data</h2>
 
 <p>
-    Game id: <?=$game->gameId()?><br/>
+    Score: <?=$game->getScores()?><br/>
     Cards in deck: <?=$game->cardsLeft()?>
+</p>
+
+<p>
+    <h5>debug:</h5>
+    Game id: <?=$game->gameId()?><br/>
 </p>
 <hr>
 Current card: <?=$game->lastCard()?>
 <!--Prev Card:<div class="card card--><?//=$_SESSION['lastCard']?><!-- front"></div>-->
-<div class="card card<?=$game->lastCard()?> front"></div>
-
-
 <?php
 if ($game->isGameOver()) {
     echo "<h4>GAME OVER</h4>";
+    echo "You've got <strong>". $game->getScores() ."</strong> points";
 } else {
     ?>
-<form action="" method="post">
-    <select name="guess">
-        <option value="<">More</option>
-        <option value=">">Less</option>
-        <option value="<=">More or Equal</option>
-        <option value=">=">Less or Equal</option>
-    </select>
-    <input type="submit" value="check">
+<form action="" method="post" id="answ">
+    <input type="hidden" id="guess" name="guess" value="">
+
+    <table>
+
+        <tr>
+            <td>&nbsp;</td>
+            <td>
+                <button type="button" onclick="$('#guess').val('='); $('#answ').submit();" value="=">Equal</button>
+            </td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>
+                <button type="button" onclick="$('#guess').val('>'); $('#answ').submit();" value=">">Smaller</button><br>
+                <button type="button" onclick="$('#guess').val('>='); $('#answ').submit();" value=">=">Smaller Or Equal</button><br>
+            </td>
+            <td align="center">
+                <div class="card card<?=$game->lastCard()?> front"></div>
+            </td>
+            <td>
+                <button type="button" onclick="$('#guess').val('<'); $('#answ').submit();" value="<">Greater</button><br>
+                <button type="button" onclick="$('#guess').val('<='); $('#answ').submit();" value="<=">Greater Or Equal</button><br>
+            </td>
+        </tr>
+
+    </table>
+
+
 </form>
     <? } ?>
+
+
+
+<blockquote>
+    <h4>Rules</h4>
+    <p>
+        You need to guess next card. Will it be bigger or smaller then the previous one<br>
+        For selecting "Greater" or "Smaller" - you'll get 3 points<br>
+        For selecting "Greater Or Equal" or "Smaller Or Equal" - you'll get 2 points<br>
+        For selecting "Equal" - you'll get 4 point.<br>
+
+        <br>
+        For each mistake you'll be fined by 4 points.
+    </p>
+</blockquote>
+
 </body>
 </html>

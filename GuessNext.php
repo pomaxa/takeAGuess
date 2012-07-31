@@ -1,11 +1,13 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: pomaxa
- * Date: 7/31/12
- * Time: 10:56 AM
+ * Main game class
+ * * * * * * * * * * * * *
+ * Include basic settings management
+ * Deck manipulation
+ * game status saver
+ *
+ * @author pomaxa none pomaxa@gmail.com
  */
-
 require 'Cache.php';
 require 'Deck.php';
 Cache::initialize(array('host' => '127.0.0.1:11211', 'prefix' => 'GN_'));
@@ -15,6 +17,8 @@ abstract class GuessNext
     public $debug = false;
     public $gameOver = false;
     public $settings =array();
+    /** @var Deck */
+    protected $deck;
 
     public function  __construct($uid = false)
     {
@@ -24,93 +28,86 @@ abstract class GuessNext
             $this->settings = $this->newGameSettings();
             $this->saveGameSettings();
         }
-
     }
 
-    public function isLess()
+    protected function pickCard()
     {
-        return $this->takeAGuess('>');
-
-    }
-
-    public function isLessOrEq()
-    {
-        return $this->takeAGuess('>=');
-
-    }
-
-    public function isLarger()
-    {
-        return $this->takeAGuess('<');
-    }
-
-    public function isLargerOrEq()
-    {
-        return $this->takeAGuess('<=');
+        $deck = $this->settings['deck'];
+        if($deck->size() < 1) {
+            $this->gameOver = true;
+        }
+        /** @var $deck Deck */
+        return $deck->pick();
     }
 
     public function takeAGuess($moreOrLess = '>')
     {
-        $deck = $this->settings['deck'];
-
-        if($deck->size() < 1) {
-            echo "GAME OVER";
-            $this->gameOver = true;
-        }
-
-        /** @var $deck Deck */
-        $newCard = $deck->pick();
+        $newCard = $this->pickCard();
 
         if($this->debug)
         {
-            echo $this->settings['lastCard'] + " " . $moreOrLess . " " . $newCard . "\n";
+            echo $this->lastCard() + " " . $moreOrLess . " " . $newCard . "\n";
         }
 
         // todo: implement score counting
         if ( $moreOrLess == '>') {
-            $return = (int)$this->settings['lastCard'] > $newCard;
+            $score = 3;
+            $return = (int)$this->lastCard() > $newCard;
         } elseif ( $moreOrLess == '<' ) {
-            $return = (int)$this->settings['lastCard'] < $newCard;
+            $score = 3;
+            $return = (int)$this->lastCard() < $newCard;
         }elseif( $moreOrLess == '>=' ) {
-            $return = (int)$this->settings['lastCard'] >= $newCard;
+            $score = 2;
+            $return = (int)$this->lastCard() >= $newCard;
         }elseif( $moreOrLess == '<=') {
-            $return = (int)$this->settings['lastCard'] <= $newCard;
+            $score = 2;
+            $return = (int)$this->lastCard() <= $newCard;
+        }elseif( $moreOrLess == '=') {
+            $score = 4;
+            $return = (int)$this->lastCard() == $newCard;
         } else {
             throw new Exception('Ebatj kolotitj');
         }
 
-        $this->settings['lastCard'] = $newCard;
+        $this->setLastCard($newCard);
 
         if(!$return) {
-            $this->gameOver = true;
+            $score = -4;
         }
+
+        $this->incScore($score);
 
         $this->saveGameSettings();
 
         return $return;
     }
 
-    public function getScores()
+    public function incScore($by =1 )
     {
-        throw new Exception('Not implemented yet');
+        return $this->settings['score'] = $this->settings['score'] + $by;
     }
 
-    private function createUid()
+    public function getScores()
+    {
+        return $this->settings['score'];
+    }
+
+    protected function createUid()
     {
         return rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
     }
 
-    private function loadGameSettings($uid)
+    protected function loadGameSettings($uid)
     {
         return unserialize(Cache::get($uid));
     }
 
-    private function dropGameSettings($uid)
+    protected function dropGameSettings($uid)
     {
         Cache::delete($uid);
     }
 
-    private function saveGameSettings()
+    protected function saveGameSettings()
     {
         Cache::set($this->settings['uid'], serialize($this->settings));
     }
@@ -130,6 +127,9 @@ abstract class GuessNext
         );
     }
 
+    protected function setLastCard($card) {
+        return $this->settings['lastCard'] = $card;
+    }
     public function lastCard()
     {
         return $this->settings['lastCard'];
