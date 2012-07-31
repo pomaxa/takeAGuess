@@ -7,14 +7,14 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require 'GuesNext.php';
+require 'GuessNext.php';
 
 
 if( FALSE == Cache::get(123455) ) {
-    $g = new GuesNext();
+    $g = new Game();
 }
 else {
-    $g = new GuesNext(123455);
+    $g = new Game(123455);
 }
 
 
