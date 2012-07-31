@@ -50,7 +50,6 @@ class Deck
 
     public function pick()
     {
-//        return $this->deck[rand(0, count($this->deck)-1)];
         return array_shift($this->deck);
     }
 

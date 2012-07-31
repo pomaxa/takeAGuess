@@ -13,7 +13,7 @@ Cache::initialize(array('host' => '127.0.0.1:11211', 'prefix' => 'GN_'));
 abstract class GuessNext
 {
     public $debug = false;
-    public $isGameOver = false;
+    public $gameOver = false;
     public $settings =array();
 
     public function  __construct($uid = false)
@@ -22,7 +22,9 @@ abstract class GuessNext
             $this->settings = $this->loadGameSettings($uid);
         } else {
             $this->settings = $this->newGameSettings();
+            $this->saveGameSettings();
         }
+
     }
 
     public function isLess()
@@ -53,10 +55,7 @@ abstract class GuessNext
 
         if($deck->size() < 1) {
             echo "GAME OVER";
-            Cache::delete($this->settings['uid']);
-            throw new Exception('No more cards');
-            exit;
-
+            $this->gameOver = true;
         }
 
         /** @var $deck Deck */
@@ -83,11 +82,10 @@ abstract class GuessNext
         $this->settings['lastCard'] = $newCard;
 
         if(!$return) {
-            $this->isGameOver = true;
-            $this->dropGameSettings($this->settings['uid']);
-        }else {
-            $this->saveGameSettings();
+            $this->gameOver = true;
         }
+
+        $this->saveGameSettings();
 
         return $return;
     }
@@ -124,14 +122,35 @@ abstract class GuessNext
         $firstCard = $newDeck->pick();
 
         return array(
-            'uid' => 123455,
+            'uid' => $this->createUid(),
             'deck' => $newDeck,
             'step' => 1,
             'score' => 0,
-            'lastCard' => $firstCard
+            'lastCard' => $firstCard,
         );
     }
 
+    public function lastCard()
+    {
+        return $this->settings['lastCard'];
+    }
+
+    public function cardsLeft()
+    {
+        if($this->settings['deck'] instanceof Deck)
+            return $this->settings['deck']->size();
+        else
+            return 0;
+    }
+
+    public function gameId()
+    {
+        return $this->settings['uid'];
+    }
+    public function isGameOver()
+    {
+        return $this->gameOver;
+    }
 }
 
 
