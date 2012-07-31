@@ -1,0 +1,10 @@
+Example of game written with simple web frontend(html/js)
+and php as backend.
+
+Todo:
+* UI
+* rewrite using namespaces
+* create level based system, to change game-play on next level.
+* score storing in db
+* Write down rules for each type of game.
+* Create nice resources(images/icons)
