@@ -5,9 +5,12 @@ session_start();
 require_once 'Game.php';
 
 if (!empty($_POST['newGame'])) {
+    session_destroy();
+    session_start();
     $game = new Game();
     $_SESSION['gameId'] = $game->gameId();
 }
+
 
 
 if (isset($_SESSION['gameId'])) {
@@ -19,6 +22,7 @@ if (isset($_SESSION['gameId'])) {
 
 
 if (!empty($_POST['guess'])) {
+    $_SESSION['lastCard'] = $game->lastCard();
     $res = $game->takeAGuess($_POST['guess']);
 }
 
@@ -43,7 +47,9 @@ if (!empty($_POST['guess'])) {
 </p>
 <hr>
 Current card: <?=$game->lastCard()?>
-<div style="width: " class="card card<?=$game->lastCard()?> front"></div>
+<!--Prev Card:<div class="card card--><?//=$_SESSION['lastCard']?><!-- front"></div>-->
+<div class="card card<?=$game->lastCard()?> front"></div>
+
 
 <?php
 if ($game->isGameOver()) {
