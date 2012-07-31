@@ -47,17 +47,17 @@ if (!empty($_POST['guess'])) {
 </form>
 <h2>Game Data</h2>
 
-<p>
-    Score: <?=$game->getScores()?><br/>
-    Cards in deck: <?=$game->cardsLeft()?>
-</p>
+
 
 <p>
     <h5>debug:</h5>
-    Game id: <?=$game->gameId()?><br/>
+    Game id: <?=$game->gameId()?>
 </p>
 <hr>
-Current card: <?=$game->lastCard()?>
+<p>
+Score: <?=$game->getScores()?><br/>
+Cards in deck: <?=$game->cardsLeft()?>
+</p>
 <!--Prev Card:<div class="card card--><?//=$_SESSION['lastCard']?><!-- front"></div>-->
 <?php
 if ($game->isGameOver()) {
