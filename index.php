@@ -28,6 +28,7 @@ if (!empty($_POST['guess'])) {
 <html>
 <head>
     <title>game</title>
+    <link rel="stylesheet" href="resource/style.css">
 </head>
 <body>
 <form action="" method="post">
@@ -42,6 +43,7 @@ if (!empty($_POST['guess'])) {
 </p>
 <hr>
 Current card: <?=$game->lastCard()?>
+<div style="width: " class="card card<?=$game->lastCard()?> front"></div>
 
 <?php
 if ($game->isGameOver()) {
@@ -50,10 +52,10 @@ if ($game->isGameOver()) {
     ?>
 <form action="" method="post">
     <select name="guess">
-        <option value=">">More</option>
-        <option value="<">Less</option>
-        <option value=">=">More or Equal</option>
-        <option value="<=">Less or Equal</option>
+        <option value="<">More</option>
+        <option value=">">Less</option>
+        <option value="<=">More or Equal</option>
+        <option value=">=">Less or Equal</option>
     </select>
     <input type="submit" value="check">
 </form>

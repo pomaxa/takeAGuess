@@ -1,0 +1,72 @@
+.card {
+    -webkit-perspective: 600;
+    width: 80px;
+    height: 120px;
+    /*position: absolute;*/
+    -moz-transition: all .3s;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.front {
+    background: #999 url(cards_sprite.jpg) 0 -480px;
+    z-index: 10;
+}
+
+.card13p {background-position: -960px 0;}
+.card12p {background-position: -880px 0;}
+.card11p {background-position: -800px 0;}
+.card10p {background-position: -720px 0;}
+.card9p  {background-position: -640px 0;}
+.card8p  {background-position: -560px 0;}
+.card7p  {background-position: -480px 0;}
+.card6p  {background-position: -400px 0;}
+.card5p  {background-position: -320px 0;}
+.card4p  {background-position: -240px 0;}
+.card3p  {background-position: -160px 0;}
+.card2p  {background-position:  -80px 0;}
+.card14p {background-position:    0   0;}
+
+.card13c {background-position: -960px -120px;}
+.card12c {background-position: -880px -120px;}
+.card11c {background-position: -800px -120px;}
+.card10c {background-position: -720px -120px;}
+.card9c  {background-position: -640px -120px;}
+.card8c  {background-position: -560px -120px;}
+.card7c  {background-position: -480px -120px;}
+.card6c  {background-position: -400px -120px;}
+.card5c  {background-position: -320px -120px;}
+.card4c  {background-position: -240px -120px;}
+.card3c  {background-position: -160px -120px;}
+.card2c  {background-position:  -80px -120px;}
+.card14c {background-position:    0   -120px;}
+
+
+.card13k {background-position: -960px -240px;}
+.card12k {background-position: -880px -240px;}
+.card11k {background-position: -800px -240px;}
+.card10k {background-position: -720px -240px;}
+.card9k  {background-position: -640px -240px;}
+.card8k  {background-position: -560px -240px;}
+.card7k  {background-position: -480px -240px;}
+.card6k  {background-position: -400px -240px;}
+.card5k  {background-position: -320px -240px;}
+.card4k  {background-position: -240px -240px;}
+.card3k  {background-position: -160px -240px;}
+.card2k  {background-position:  -80px -240px;}
+.card14k {background-position:    0   -240px;}
+
+.card13b {background-position: -960px -360px;}
+.card12b {background-position: -880px -360px;}
+.card11b {background-position: -800px -360px;}
+.card10b {background-position: -720px -360px;}
+.card9b  {background-position: -640px -360px;}
+.card8b  {background-position: -560px -360px;}
+.card7b  {background-position: -480px -360px;}
+.card6b  {background-position: -400px -360px;}
+.card5b  {background-position: -320px -360px;}
+.card4b  {background-position: -240px -360px;}
+.card3b  {background-position: -160px -360px;}
+.card2b  {background-position:  -80px -360px;}
+.card14b {background-position:    0   -360px;}
+
