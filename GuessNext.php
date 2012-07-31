@@ -1,4 +1,9 @@
 <?php
+
+require 'Cache.php';
+require 'Deck.php';
+Cache::initialize(array('host' => '127.0.0.1:11211', 'prefix' => 'GN_'));
+
 /**
  * Main game class
  * * * * * * * * * * * * *
@@ -8,10 +13,6 @@
  *
  * @author pomaxa none pomaxa@gmail.com
  */
-require 'Cache.php';
-require 'Deck.php';
-Cache::initialize(array('host' => '127.0.0.1:11211', 'prefix' => 'GN_'));
-
 abstract class GuessNext
 {
     public $debug = false;
@@ -20,6 +21,9 @@ abstract class GuessNext
     /** @var Deck */
     protected $deck;
 
+    /**
+     * @param bool $uid
+     */
     public function  __construct($uid = false)
     {
         if($uid) {
@@ -30,6 +34,10 @@ abstract class GuessNext
         }
     }
 
+    /**
+     * Get card from deck;
+     * @return string card key;
+     */
     protected function pickCard()
     {
         $deck = $this->settings['deck'];
@@ -38,48 +46,6 @@ abstract class GuessNext
         }
         /** @var $deck Deck */
         return $deck->pick();
-    }
-
-    public function takeAGuess($moreOrLess = '>')
-    {
-        $newCard = $this->pickCard();
-
-        if($this->debug)
-        {
-            echo $this->lastCard() + " " . $moreOrLess . " " . $newCard . "\n";
-        }
-
-        // todo: implement score counting
-        if ( $moreOrLess == '>') {
-            $score = 3;
-            $return = (int)$this->lastCard() > $newCard;
-        } elseif ( $moreOrLess == '<' ) {
-            $score = 3;
-            $return = (int)$this->lastCard() < $newCard;
-        }elseif( $moreOrLess == '>=' ) {
-            $score = 2;
-            $return = (int)$this->lastCard() >= $newCard;
-        }elseif( $moreOrLess == '<=') {
-            $score = 2;
-            $return = (int)$this->lastCard() <= $newCard;
-        }elseif( $moreOrLess == '=') {
-            $score = 4;
-            $return = (int)$this->lastCard() == $newCard;
-        } else {
-            throw new Exception('Ebatj kolotitj');
-        }
-
-        $this->setLastCard($newCard);
-
-        if(!$return) {
-            $score = -4;
-        }
-
-        $this->incScore($score);
-
-        $this->saveGameSettings();
-
-        return $return;
     }
 
     public function incScore($by =1 )
@@ -92,27 +58,47 @@ abstract class GuessNext
         return $this->settings['score'];
     }
 
+    /**
+     * Generate unique game ID;
+     * @return string
+     */
     protected function createUid()
     {
+        //TODO:: change to better uid generation
         return rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9);
     }
 
+    /**
+     * Load game settings by uid;
+     * @param $uid
+     * @return mixed
+     */
     protected function loadGameSettings($uid)
     {
         return unserialize(Cache::get($uid));
     }
 
+    /**
+     * Drop all game data for $uid
+     * @param $uid
+     */
     protected function dropGameSettings($uid)
     {
         Cache::delete($uid);
     }
 
+    /**
+     * Save game settings by uid in $this->settings
+     */
     protected function saveGameSettings()
     {
         Cache::set($this->settings['uid'], serialize($this->settings));
     }
 
-
+    /**
+     * New game data preparation;
+     * @return array
+     */
     private function newGameSettings()
     {
         $newDeck = new Deck(true);
@@ -127,26 +113,51 @@ abstract class GuessNext
         );
     }
 
+    /**
+     * Last card setter
+     * @param string $card
+     * @return string
+     */
     protected function setLastCard($card) {
         return $this->settings['lastCard'] = $card;
     }
+
+    /**
+     * Last card getter
+     * @return string
+     */
     public function lastCard()
     {
         return $this->settings['lastCard'];
     }
 
+    /**
+     * Card in deck (for current moment)
+     * @return int
+     */
     public function cardsLeft()
     {
-        if($this->settings['deck'] instanceof Deck)
+        if($this->settings['deck'] instanceof Deck) {
             return $this->settings['deck']->size();
-        else
+        } else {
+            //TODO: throw error at this point?
             return 0;
+        }
     }
 
+    /**
+     * Game ID getter
+     * @return mixed
+     */
     public function gameId()
     {
         return $this->settings['uid'];
     }
+
+    /**
+     * Check if game is over
+     * @return bool
+     */
     public function isGameOver()
     {
         return $this->gameOver;

@@ -6,7 +6,12 @@
  */
 class GuessNextSmallerBigger extends GuessNext
 {
-
+    /**
+     * Take a guess that next card is $moreOrLess
+     * @param string $moreOrLess
+     * @return bool
+     * @throws Exception
+     */
     public function takeAGuess($moreOrLess = '>')
     {
         $newCard = $this->pickCard();
@@ -36,39 +41,52 @@ class GuessNextSmallerBigger extends GuessNext
         }
 
         $this->setLastCard($newCard);
-
         if (!$return) {
             $score = -4;
         }
 
         $this->incScore($score);
-
         $this->saveGameSettings();
 
         return $return;
     }
 
+    /**
+     * @return bool
+     */
     public function isLess()
     {
         return $this->takeAGuess('>');
     }
 
+    /**
+     * @return bool
+     */
     public function equal()
     {
         return $this->takeAGuess('=');
     }
 
+    /**
+     * @return bool
+     */
     public function isLessOrEq()
     {
         return $this->takeAGuess('>=');
 
     }
 
+    /**
+     * @return bool
+     */
     public function isLarger()
     {
         return $this->takeAGuess('<');
     }
 
+    /**
+     * @return bool
+     */
     public function isLargerOrEq()
     {
         return $this->takeAGuess('<=');

@@ -6,6 +6,11 @@
  */
 class GuessNextColor extends GuessNext
 {
+    /**
+     * Take a guess that next card color will be $color
+     * @param string $color
+     * @return bool
+     */
     public function nextColor( $color = 'black')
     {
         $newCard = $this->pickCard();
@@ -19,10 +24,16 @@ class GuessNextColor extends GuessNext
         return ($currColor == $color);
     }
 
+    /**
+     * Take a guess that next card color will be Black
+     */
     public function nextColorBlack(){
         $this->nextColor('black');
     }
 
+    /**
+     * Take a guess that next card color will be Red
+     */
     public function nextColorRed(){
         $this->nextColor('red');
     }

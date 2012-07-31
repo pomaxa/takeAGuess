@@ -1,7 +1,12 @@
 <?php
-
+/**
+ * Deck manipulation class
+ * @author pomaxa none <pomaxa@gmail.com>
+ */
 class Deck
 {
+    //TODO: implement array access?
+
     /**
      * @var array
      */
@@ -25,6 +30,10 @@ class Deck
         return count($this->deck);
     }
 
+    /**
+     * List of cards in deck
+     * @return array
+     */
     public function generateDeck()
     {
         $deck = array(
@@ -42,30 +51,51 @@ class Deck
             '13k', '13p', '13c', '13b', // K
             '14k', '14p', '14c', '14b', // A
         );
-
         shuffle($deck);
-
         return $deck;
     }
 
+    /**
+     * Get card(key) from deck
+     * @return string
+     */
     public function pick()
     {
         return array_shift($this->deck);
     }
 
+    /**
+     * Shuffle deck
+     * @return bool
+     */
     public function shuffle()
     {
         return shuffle($this->deck);
     }
 
     /**
-     * Translate card id into image;
-     * @param $card
+     * @param string $cardKey | must be one char
+     * @param string $lang | two letters code
      * @return string
+     * @throws Exception
      */
-    public function getImage($card)
-    {
-        return 'http://domain.com/image-'.$card.'.png';
-    }
+    public function translateCard($cardKey, $lang = 'en'){
+        if($lang != 'en') {
+            throw new Exception('Ahtung, for now we have translation only for "EN" lang');
+        }
 
+        $translations = array(
+            'en' => array(
+                'k' => 'Clubs',
+                'p' => 'Spades',
+                'c' => 'Hearts',
+                'b' => 'Diamonds'
+            )
+        );
+        if(isset($translations[$lang][$cardKey])){
+            return $translations[$lang][$cardKey];
+        }else {
+            throw new Exception('There is no such color in deck... ');
+        }
+    }
 }

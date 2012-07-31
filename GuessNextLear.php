@@ -6,6 +6,10 @@
  */
 class GuessNextLear extends GuessNext
 {
+    /**
+     * @param string $lear
+     * @return bool
+     */
     public function nextLear( $lear = 'k' )
     {
         $newCard = $this->pickCard();
@@ -13,17 +17,31 @@ class GuessNextLear extends GuessNext
         return ($lear == $mastj);
     }
 
+    /**
+     * @return bool
+     */
     public function nextLearHearts(){
-        $this->nextLear('c');
+        return $this->nextLear('c');
     }
 
+    /**
+     * @return bool
+     */
     public function nextLearSpades(){
-        $this->nextLear('p');
+        return $this->nextLear('p');
     }
+
+    /**
+     * @return bool
+     */
     public function nextLearClubs(){
-        $this->nextLear('k');
+        return $this->nextLear('k');
     }
+
+    /**
+     * @return bool
+     */
     public function nextLearDiamonds(){
-        $this->nextLear('b');
+        return $this->nextLear('b');
     }
 }
