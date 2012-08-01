@@ -1,72 +1,86 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: pomaxa
- * Date: 8/1/12
- * Time: 11:08 AM
- * To change this template use File | Settings | File Templates.
+ * Main game class to manage game types;
+ * @author pomaxa none <pomaxa@gmail.com>
  */
 class GameManager
 {
 
     public $uid = false;
     public $level = 1;
+    /**
+     * @var GuessNextColor|GuessNextLear|GuessNextSmallerBigger
+     */
+    public $game;
 
     public function __construct($level = 1, $uid = false)
     {
-        $this->setLevel($level);
         $this->setUid($uid);
-
+        $this->game = $this->loadLevel($level);
+        $this->uid = $this->game->gameId();
     }
 
 
-
+    /**
+     * @param string|int $level type of game to use
+     * @return GuessNextColor|GuessNextLear|GuessNextSmallerBigger
+     * @throws Exception
+     */
     public function loadLevel($level)
     {
-        switch($level)
+        $this->setLevel($level);
+        switch($this->getLevel())
         {
             case 1:
-                return ;
+            case 'smallerbigger':
+                $class = new GuessNextSmallerBigger($this->uid);
             break;
 
+            case 2:
+            case 'lear':
+                $class = new GuessNextLear($this->uid);
+            break;
+
+            case 3:
+            case 'color':
+                $class = new GuessNextColor($this->uid);
+            break;
+
+            default:
+                throw new Exception('some shit happend in level loader');
         }
-    }
 
-    //hardcoded level
-
-    public function level1()
-    {
-        return new GuessNextSmallerBigger($this->uid);
-    }
-
-    public function level2()
-    {
-        return new GuessNextColor($this->uid);
-    }
-
-    public function level3()
-    {
-        return new GuessNextLear($this->uid);
+        return $class;
     }
 
 
-    //getter/setter
-
+    /**
+     * @param $level
+     */
     public function setLevel($level)
     {
-        $this->level = $level;
+        $this->level = strtolower($level);//just in case
     }
 
+    /**
+     * @return int|str
+     */
     public function getLevel()
     {
         return $this->level;
     }
 
+    /**
+     * @param $uid
+     */
     public function setUid($uid)
     {
         $this->uid = $uid;
     }
 
+    /**
+     * @return bool
+     */
     public function getUid()
     {
         return $this->uid;
