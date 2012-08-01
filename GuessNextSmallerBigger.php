@@ -16,11 +16,6 @@ class GuessNextSmallerBigger extends GuessNext
     {
         $newCard = $this->pickCard();
 
-        if ($this->debug) {
-            echo $this->lastCard() + " " . $moreOrLess . " " . $newCard . "\n";
-        }
-
-        // todo: implement score counting
         if ($moreOrLess == '>') {
             $score = 3;
             $return = (int)$this->lastCard() > $newCard;
@@ -43,6 +38,11 @@ class GuessNextSmallerBigger extends GuessNext
         $this->setLastCard($newCard);
         if (!$return) {
             $score = -4;
+            $this->addMistake();
+        }
+
+        if( $this->isGameOver() ) {
+            //todo: implement game-over behavior
         }
 
         $this->incScore($score);

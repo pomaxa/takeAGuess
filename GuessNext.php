@@ -99,7 +99,7 @@ abstract class GuessNext
      * New game data preparation;
      * @return array
      */
-    private function newGameSettings()
+    private function newGameSettings($maxMistakesCount = 51)
     {
         $newDeck = new Deck(true);
         $firstCard = $newDeck->pick();
@@ -110,6 +110,16 @@ abstract class GuessNext
             'step' => 1,
             'score' => 0,
             'lastCard' => $firstCard,
+            'mistakes' => 0,
+
+            //not used yet.
+
+            //rules of game
+            'maxMistakesCount'=>$maxMistakesCount, //before game over; TODO: implement
+            'gameType' => 'SmallerBigger', //todo: list possible values, and factory
+            'player_id' => 'anonymous', // todo: implement per player stats
+            'deckStyle' => 'default', //todo: define css used to show cards.
+
         );
     }
 
@@ -162,6 +172,67 @@ abstract class GuessNext
     {
         return $this->gameOver;
     }
+
+    /**
+     * Save game scores;
+     * @param string $name
+     * @return bool
+     */
+    public function saveScores($name = 'Anonymous')
+    {
+        //todo: save data into db;
+
+        $top = Cache::get('top');
+        if($top !== FALSE) {
+            $top = unserialize($top);
+        }else {
+            $top = array();
+        }
+        $top[$this->getScores()] = $name;
+        return Cache::set('top', serialize($top), 3600*24*120);
+    }
+
+    /**
+     * Get top from DB
+     * @return array|bool|mixed
+     */
+    public function loadScores()
+    {
+        $top = Cache::get('top');
+        if($top !== FALSE) {
+            $top = unserialize($top);
+        }else {
+            $top = array();
+        }
+
+        return $top;
+    }
+
+    /**
+     * Inc mistakes counter and return it value
+     * @return int
+     */
+    public function addMistake()
+    {
+        $this->settings['mistakes']++;
+
+        if($this->getMistakesCount() >= $this->getMaxMistakes()){
+            $this->gameOver = true;
+        }
+
+        return $this->settings['mistakes'];
+    }
+
+    public function getMistakesCount()
+    {
+        return $this->settings['mistakes'];
+    }
+
+    public function getMaxMistakes()
+    {
+        return $this->settings['maxMistakesCount'];
+    }
+
 }
 
 
