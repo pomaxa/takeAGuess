@@ -4,7 +4,7 @@
  *
  * @author pomaxa none pomaxa@gmail.com
  */
-class GuessNextSmallerBigger extends GuessNext
+class GuessNextSmallerBigger extends BaseGame
 {
     /**
      * Take a guess that next card is $moreOrLess
@@ -14,39 +14,37 @@ class GuessNextSmallerBigger extends GuessNext
      */
     public function takeAGuess($moreOrLess = '>')
     {
-        $newCard = $this->pickCard();
+        $lastCard = $this->lastCard();
+        $currentCard = $this->pickACard();
 
         if ($moreOrLess == '>') {
             $score = 3;
-            $return = (int)$this->lastCard() > $newCard;
+            $return = (int)$lastCard > $currentCard;
         } elseif ($moreOrLess == '<') {
             $score = 3;
-            $return = (int)$this->lastCard() < $newCard;
+            $return = (int)$lastCard < $currentCard;
         } elseif ($moreOrLess == '>=') {
             $score = 2;
-            $return = (int)$this->lastCard() >= $newCard;
+            $return = (int)$lastCard >= $currentCard;
         } elseif ($moreOrLess == '<=') {
             $score = 2;
-            $return = (int)$this->lastCard() <= $newCard;
+            $return = (int)$lastCard <= $currentCard;
         } elseif ($moreOrLess == '=') {
             $score = 4;
-            $return = (int)$this->lastCard() == $newCard;
+            $return = (int)$lastCard == $currentCard;
         } else {
             throw new Exception('Ebatj kolotitj');
         }
 
-        $this->setLastCard($newCard);
         if (!$return) {
             $score = -4;
-            $this->addMistake();
         }
 
-        if( $this->isGameOver() ) {
+        if( $this->gameOver ) {
             //todo: implement game-over behavior
         }
 
-        $this->incScore($score);
-        $this->saveGameSettings();
+        $this->incScoreBy($score);
 
         return $return;
     }
@@ -92,4 +90,16 @@ class GuessNextSmallerBigger extends GuessNext
         return $this->takeAGuess('<=');
     }
 
+    public function lastCard()
+    {
+        return $this->playedCards[count($this->playedCards)-1];
+    }
+
+    public function pickACard()
+    {
+        $card = $this->deck->pick();
+        $this->playedCards[] = $card;
+        return $card;
+
+    }
 }

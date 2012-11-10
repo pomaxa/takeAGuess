@@ -1,9 +1,5 @@
 <?php
 
-require 'Cache.php';
-require 'Deck.php';
-Cache::initialize(array('host' => '127.0.0.1:11211', 'prefix' => 'GN_'));
-
 /**
  * Main game class
  * * * * * * * * * * * * *

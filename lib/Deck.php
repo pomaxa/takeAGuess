@@ -5,33 +5,38 @@
  */
 class Deck
 {
-    //TODO: implement array access?
+    /** @var array */
+    public $deck;
 
     /**
-     * @var array
+     * @param array $deck
      */
-    private $deck;
-
-    public function __construct($createNew = false, array $deck = array())
+    public function __construct(array $deck = array())
     {
-        if ($createNew) {
-            $deck = $this->generateDeck();
-        } else {
-            shuffle($deck);
+        if (empty($deck)) {
+            $this->generateDeck();
         }
-
-        $this->deck = $deck;
-
-        return $deck;
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function size()
     {
         return count($this->deck);
     }
 
     /**
-     * List of cards in deck
+     * @return int
+     */
+    public function cardsLeft()
+    {
+        return $this->size();
+    }
+
+    /**
+     * Create Standard 52 cards Deck.
      * @return array
      */
     public function generateDeck()
@@ -52,7 +57,8 @@ class Deck
             '14k', '14p', '14c', '14b', // A
         );
         shuffle($deck);
-        return $deck;
+        $this->deck = $deck;
+        return $this;
     }
 
     /**
@@ -97,5 +103,10 @@ class Deck
         }else {
             throw new Exception('There is no such color in deck... ');
         }
+    }
+
+    public function getDeck()
+    {
+        return $this->deck;
     }
 }

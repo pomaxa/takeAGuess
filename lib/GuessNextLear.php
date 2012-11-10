@@ -4,7 +4,7 @@
  *  guessing Lear
  * @author pomaxa none pomaxa@gmail.com
  */
-class GuessNextLear extends GuessNext
+class GuessNextLear extends BaseGame
 {
     /**
      * @param string $lear
@@ -12,9 +12,20 @@ class GuessNextLear extends GuessNext
      */
     public function nextLear( $lear = 'k' )
     {
-        $newCard = $this->pickCard();
-        $mastj = substr($newCard, 0,-1);
-        return ($lear == $mastj);
+        $currentCard = $this->deck->pick();
+
+
+        if($this->debug) {
+            $this->playedCards[] = $currentCard;
+        }
+
+        $currentLear = substr($currentCard, -1);
+        $amIRight = ($lear == $currentLear);
+
+        if($amIRight) { $this->incScoreBy(1);}
+        else { $this->incScoreBy(-2); }
+
+        return $amIRight;
     }
 
     /**
