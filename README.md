@@ -1,4 +1,4 @@
-Simple card game. v0.2
+Simple card game. v0.2  ![Build Status](https://travis-ci.org/pomaxa/takeAGuess.svg?branch=v0.1)
 ======================
 
 Score based game with cards.
