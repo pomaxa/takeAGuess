@@ -1,0 +1,15 @@
+{
+    "name": "pmx/take-a-guess",
+    "description": "Simple card game.",
+    "license": "MIT",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "authors": [
+        {
+            "name": "Roman 'pomaxa' Shvets",
+            "email": "pomaxa@gmail.com"
+        }
+    ],
+    "require": {}
+}
