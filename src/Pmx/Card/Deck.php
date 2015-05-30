@@ -2,7 +2,6 @@
 
 namespace Pmx\Card;
 
-
 use Pmx\Exception\Error;
 use Pmx\Exception\LogicError;
 

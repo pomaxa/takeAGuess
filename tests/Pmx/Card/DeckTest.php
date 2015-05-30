@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rsvecs
- * Date: 5/29/15
- * Time: 9:40 PM
- */
 
 namespace Pmx\Card;
-
 
 class DeckTest extends \PHPUnit_Framework_TestCase
 {

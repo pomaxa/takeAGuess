@@ -40,12 +40,13 @@ class MoreOrLess extends BaseGame
         if (!$return) {
             $score = -4;
         }
-        if( $this->gameOver ) {
+        if ($this->gameOver) {
             throw new GameOver();
         }
         $this->incScoreBy($score);
         return $return;
     }
+
     /**
      * @return bool
      */
@@ -53,6 +54,7 @@ class MoreOrLess extends BaseGame
     {
         return $this->takeAGuess('>');
     }
+
     /**
      * @return bool
      */
@@ -60,6 +62,7 @@ class MoreOrLess extends BaseGame
     {
         return $this->takeAGuess('=');
     }
+
     /**
      * @return bool
      */
@@ -67,6 +70,7 @@ class MoreOrLess extends BaseGame
     {
         return $this->takeAGuess('>=');
     }
+
     /**
      * @return bool
      */
@@ -74,6 +78,7 @@ class MoreOrLess extends BaseGame
     {
         return $this->takeAGuess('<');
     }
+
     /**
      * @return bool
      */
@@ -81,10 +86,12 @@ class MoreOrLess extends BaseGame
     {
         return $this->takeAGuess('<=');
     }
+
     public function lastCard()
     {
-        return $this->playedCards[count($this->playedCards)-1];
+        return $this->playedCards[count($this->playedCards) - 1];
     }
+
     public function pickACard()
     {
         $card = $this->deck->pick();
