@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: pmx
- * Date: 15.30.5
- * Time: 03:10
- */
 
 namespace Pmx\Game;
 
